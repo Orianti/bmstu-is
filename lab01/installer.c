@@ -1,16 +1,17 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "license/license.h"
 
 int main()
 {
-    printf("Installing..\n");
-    if (create_license() != 0) {
-        fprintf(stderr, "Can't create a license file!\n");
-        return -1;
-    }
+	printf("Installing..\n");
+	if (create_license() != EXIT_SUCCESS) {
+		fprintf(stderr, "Can't create a license file!\n");
+		return EXIT_FAILURE;
+	}
 
-    printf("Installation completed successfully.\n");
+	printf("Installation completed successfully.\n");
 
-    return 0;
+	return EXIT_SUCCESS;
 }

@@ -1,30 +1,31 @@
-CC=gcc
-CFLAGS=-Wall -Wextra
+EXECS = program.out installer.out
 
-# define any directories containing header files other than /usr/include
-INCLUDES=
+BUILD_DIR = build
 
-# define library paths in addition to /usr/lib
-LFLAGS=
+CC = gcc
+CFLAGS = -Wall -Wextra -MMD
+LDFLAGS =
+LDLIBS = -lcrypto
 
-# define any libraries to link into executable
-LIBS=-lcrypto
+SRCS = license/license.c # program.c and installer.c implide
 
-INSTALLER_SRCS=installer.c license/license.c
-INSTALLER_OBJS=$(INSTALLER_SRCS:.c=.o)
-PROGRAM_SRCS=program.c license/license.c
-PROGRAM_OBJS=$(PROGRAM_SRCS:.c=.o)
+OBJS = $(SRCS:%.c=$(BUILD_DIR)/%.o)
+DEPS = $(OBJS:.o=.d)
 
-all:	installer program
-       
-installer: $(INSTALLER_OBJS) 
-	$(CC) -o installer $(INSTALLER_OBJS) $(LFLAGS) $(LIBS)
+TARGETS = $(addprefix $(BUILD_DIR)/,$(EXECS))
 
-program: $(PROGRAM_OBJS)
-	$(CC) -o program $(PROGRAM_OBJS) $(LFLAGS) $(LIBS)
+.PHONY: all
+all: $(TARGETS)
 
-.c.o:
-	$(CC) $(CFLAGS) $(INCLUDES) -c $<  -o $@
+$(TARGETS): %.out: %.o $(OBJS)
+	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@ $(LDLIBS)
 
+-include $(DEPS)
+
+$(BUILD_DIR)/%.o: %.c
+	mkdir -p $(dir $@)
+	$(CC) -c $(CFLAGS) $< -o $@
+
+.PHONY: clean
 clean:
-	$(RM) *.o *~ installer program 
+	rm -rf $(BUILD_DIR)
