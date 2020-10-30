@@ -3,7 +3,7 @@ from secrets import SystemRandom
 
 class BaseRotor(object):
     def __init__(self, alphabet: bytes = None):
-        self.alphabet = alphabet
+        self.alphabet: bytes = alphabet
 
     @property
     def alphabet(self) -> bytes:
