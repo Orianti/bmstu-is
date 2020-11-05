@@ -19,8 +19,11 @@ def main():
             exit(1)
     print('Enigma was configured successfully.', end='\n\n')
 
-    src = str(input('Source filename: '))
+    src = str(input('Source file name: '))
     dst = str(input('Destination file name: '))
+    if src == dst:
+        print('Error! Source and destination file must be different.')
+        exit(1)
     try:
         enigma.encrypt_file(src, dst)
     except FileNotFoundError:

@@ -1,4 +1,4 @@
-from enigma.baserotor import BaseRotor
+from enigma.base_rotor import BaseRotor
 
 
 class Rotor(BaseRotor):
